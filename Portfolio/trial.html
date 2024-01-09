@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Page Title</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url('background.jpg') top left / cover no-repeat, url('background.png') bottom left / cover no-repeat;
+      flex-direction: column;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 20px;
+    }
+
+    .column {
+      flex-basis: 48%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .portfolio1,
+    .portfolio2 {
+      width: 100%;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, .2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(20px);
+      color: aliceblue;
+      border-radius: 10px;
+      padding: 30px 40px;
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .portfolio1 .img {
+      float: left;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4cm;
+      height: 4cm;
+      border-radius: 50%;
+      background-color: red;
+      border: 2px solid rgba(255, 255, 255, .2);
+      box-sizing: border-box;
+    }
+
+    .portfolio2 {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .wrapper,
+    .Socialmedia {
+      width: 100%;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, .2);
+      box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(20px);
+      color: aliceblue;
+      border-radius: 10px;
+      padding: 30px 40px;
+      text-align: center;
+    }
+
+    .wrapper h1 {
+      font-size: 36px;
+      text-align: center;
+    }
+
+    .wrapper .input-box {
+      position: relative;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, .2);
+      width: 100px;
+      height: 50px;
+      margin: 30px;
+    }
+
+    .input-box input {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border-radius: 40px;
+      outline: none;
+      border: 2px solid rgba(255, 255, 255, .2);
+      font-size: 16px;
+      color: aliceblue;
+      padding: 20px 45px 20px 20px;
+    }
+
+    .input-box::placeholder {
+      color: white;
+    }
+
+    .input-box i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+
+    .remember-forgot label input {
+      accent-color: white;
+      margin-right: 3px;
+    }
+
+    .remember-forgot a {
+      align: left;
+      align-items: left;
+      text-align: left;
+      color: blue;
+      text-decoration: none;
+    }
+
+    .remember-forgot a:hover {
+      text-decoration: underline;
+    }
+
+    .wrapper .btn {
+      width: 100%;
+      height: 45px;
+      background: white;
+      border: none;
+      outline: none;
+      border-radius: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+      cursor: pointer;
+      font-size: 16px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .wrapper .register-link {
+      font-size: 14.5px;
+      text-align: center;
+      margin-top: 20px 0 15px;
+    }
+
+    .register-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register-link p a:hover {
+      text-decoration: underline;
+    }
+
+    .spacer {
+      height: 20px;
+    }
+
+    .Socialmedia:hover {
+      background-color: white;
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="column">
+      <div class="portfolio1">
+        <div class="img"></div>
+        <h1>MuthuKumaran S</h1>
+            <h2>Developer</h2>
+            <br>
+        <!-- Add your content for portfolio1 here -->
+      </div>
+    </div>
+    <div class="column">
+      <div class="portfolio2">
+        <table>
+            <thead>
+                <tr>
+                    <th>Degree</th>
+                    <th>College</th>
+                    <th>Marks</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>B.E</td>
+                    <td>TCE College</td>
+                    <td>9.5</td>
+                    <td>2026</td>
+                </tr>
+                <tr>
+                    <td>D B.E</td>
+                    <td>KLN College</td>
+                    <td>92%</td>
+                    <td>2023</td>
+                </tr>
+                <tr>
+                    <td>10TH</td>
+                    <td>Sivakasi Nadars</td>
+                    <td>66%</td>
+                    <td>2020</td>
+                </tr>
+                <tr>
+                    <td>A+</td>
+                    <td>LMN College</td>
+                    <td>95</td>
+                    <td>2024</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Add your content for portfolio2 here -->
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="column">
+      <div class="wrapper">
+        <form action="">
+            <h1>Login</h1>
+            <div class ="input-box">
+                <input type="text" placeholder="Name" required></input>
+                <box-icon type='solid' name='user'></box-icon>
+            </div>
+            <div class ="input-box">
+                <input type="company" placeholder="Company" required></input>
+                <box-icon type='solid' name='component'></box-icon>
+            </div>
+            <div class ="input-box">
+                <input type="text" placeholder="Email" required></input>
+                <box-icon type='logo' name='gmail'></box-icon>
+            </div>
+            <div class = "remember-forgot">
+                <label><input type="checkbox">Remember Me</label>
+
+                <a href="#"> Social Media</a>
+            </div>
+            <button type="submit" class="btn">Send Mail</button>
+            <div class="register-link">
+                <a href="#">Don't have an Account?</a>"
+            </div>
+        </form>
+        <!-- Add your content for wrapper here -->
+      </div>
+    </div>
+    <div class="column">
+      <div class="Socialmedia">
+        <!-- Add your content for Socialmedia here -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
