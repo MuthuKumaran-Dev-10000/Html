@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+</head>
+
+<body>
+    <div class="wrapper">
+        <form action="/login" method="POST" id="loginForm">
+            <h1>Login</h1>
+            <div class="input-box">
+                <input type="text" name="email" placeholder="Username" required>
+                <box-icon type='solid' name='user'></box-icon>
+            </div>
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required>
+                <box-icon type='solid' name='key'></box-icon>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div class="register-link">
+                <a href="signUp.html">Don't have an Account?</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    data: formData,
+                    success: function(response) {
+                        if (response.message === 'Login successful') {
+                            window.location.href = response.redirect;
+                        } else {
+                            console.log(response.message);
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function typeText(element, text, speed) {
+            let i = 0;
+            const intervalId = setInterval(() => {
+                element.innerHTML += text.charAt(i);
+                i++;
+                if (i > text.length) {
+                    clearInterval(intervalId);
+                }
+            }, speed);
+        }
+
+        const headings = document.querySelectorAll('.wrapper h1, .wrapper a');
+        headings.forEach((heading) => {
+            const text = heading.innerText;
+            heading.innerText = '';
+            typeText(heading, text, 80);
+        });
+    </script>
+</body>
+
+</html>
