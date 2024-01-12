@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        #chat-container {
+            width: 300px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #chat-messages {
+            max-height: 300px;
+            overflow-y: scroll;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin: 5px;
+            padding: 8px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .my-message {
+            align-self: flex-end;
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .opponent-message {
+            align-self: flex-start;
+            background-color: #ddd;
+        }
+
+        #message-input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        #send-button {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <title>Chat Application</title>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Ask for the username
+        const username = prompt("Please enter your username:");
+        socket.emit('set username', username);
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+
+            if (message !== '') {
+                socket.emit('chat message', { message });
+
+                // Clear the input field
+                messageInput.value = '';
+            }
+        }
+
+        socket.on('chat message', (data) => {
+            const chatMessages = document.getElementById('chat-messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = `${data.username}: ${data.message}`;
+            
+            // Apply different styles based on the sender
+            if (data.username === 'ME') {
+                newMessage.className = 'message my-message';
+            } else {
+                newMessage.className = 'message opponent-message';
+            }
+
+            chatMessages.appendChild(newMessage);
+        });
+    </script>
+</body>
+</html>
