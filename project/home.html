@@ -6,13 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <title>Bottom Tab Bar</title>
+    <title>YOUTUBE</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
             background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
         }
 
         .container {
@@ -94,26 +100,29 @@
         }
 
         .video-card {
-    position: relative;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex; /* Use flexbox for layout */
-    box-sizing: border-box; /* Include padding and borders in the total width and height */
-}
+            position: relative;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex; /* Use flexbox for layout */
+            box-sizing: border-box; /* Include padding and borders in the total width and height */
+        }
 
-.video-player {
-    flex: 1; /* Take remaining space */
-    width: 100%; /* Ensure the video takes up 100% of the width */
-    height: 100%; /* Adjust the height of the video player */
-}
+        .video-player {
+            flex: 1; /* Take remaining space */
+            width: 100%; /* Ensure the video takes up 100% of the width */
+            height: 100%; /* Adjust the height of the video player */
+        }
 
         .video-details {
-            flex: 0 0 200px; /* Fixed width for video details */
+            flex: 1; /* Take remaining space */
             padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .video-details h2 {
@@ -164,6 +173,7 @@
             align-items: center;
             padding: 10px;
             transition: color 0.3s;
+            position: relative;
         }
 
         .tab-item span {
@@ -175,6 +185,68 @@
         .tab-item.active {
             color: #007bff;
         }
+
+        .tab-item.active::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #007bff;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Side Popup Menu Styles */
+        .side-popup {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 0;
+            background-color: #fff;
+            overflow-x: hidden;
+            transition: width 0.3s;
+            box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .side-popup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .side-popup a {
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .side-popup a:hover {
+            color: #007bff;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+
+        .settings-popup {
+            position: fixed;
+            bottom: 60px;
+            right: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -183,6 +255,15 @@
         <div class="top-bar">
             <div class="profile">
                 <box-icon name='user-circle'></box-icon>
+                <div class="profile" onclick="toggleSidePopup()" style="margin-left: auto; height: min-content; width: min-content;">
+                    <style>
+                        .profile:hover {
+                            background-color: red;
+                        }
+                    </style>
+                    <box-icon name='three-dots'></box-icon>
+                </div>
+
                 <span>Your Name</span>
             </div>
             <div class="search-bar">
@@ -190,6 +271,16 @@
                 <button class="search-button">
                     <box-icon name='search'></box-icon>
                 </button>
+            </div>
+            <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                <box-icon name='moon'></box-icon>
+            </div>
+            <div class="side-popup">
+                <div class="side-popup-content">
+                    <p>Profile: Your Name</p>
+                    <p>Channel ID: YourChannelID</p>
+                    <a href="#">Logout</a>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -268,7 +359,7 @@
             <!-- Add more video placeholders as needed -->
         </div>
         <nav class="bottom-tab">
-            <a href="#" class="tab-item" onclick="changeTab('home')">
+            <a href="#" class="tab-item active" onclick="changeTab('home')">
                 <box-icon name='home'></box-icon>
                 <span>Home</span>
             </a>
@@ -276,7 +367,7 @@
                 <box-icon name='message-square-detail'></box-icon>
                 <span>Post</span>
             </a>
-            <a href="#" class="tab-item" onclick="changeTab('chat')">
+            <a href="Chat.html" class="tab-item" onclick="changeTab('chat')">
                 <box-icon name='chat'></box-icon>
                 <span>Chat</span>
             </a>
@@ -288,16 +379,14 @@
                 <box-icon name='history'></box-icon>
                 <span>History</span>
             </a>
+            <div class="settings-popup" id="settingsPopup">
+                <!-- Add your settings content here -->
+                Settings Content
+            </div>
         </nav>
     </div>
 
     <script>
-        function changeTab(tabName) {
-            // Implement your page transition logic here
-            console.log(`Switching to ${tabName} tab`);
-            // For simplicity, you can update the content dynamically or navigate to different pages.
-        }
-
         function togglePlay(videoId) {
             var video = document.getElementById(videoId).querySelector('.video-player');
             if (video.paused) {
@@ -316,7 +405,28 @@
             // Implement logic to load the previous video
             console.log(`Loading previous video for ${videoId}`);
         }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleSidePopup() {
+            var sidePopup = document.querySelector('.side-popup');
+            sidePopup.style.width = (sidePopup.style.width === '300px') ? '0' : '300px';
+        }
+
+        function changeTab(tabName) {
+            // Implement logic to handle tab change
+            console.log(`Changing to tab: ${tabName}`);
+            
+            // Add logic to show settings popup for the 'settings' tab
+            if (tabName === 'settings') {
+                var settingsPopup = document.getElementById('settingsPopup');
+                settingsPopup.style.display = (settingsPopup.style.display === 'block') ? 'none' : 'block';
+            }
+        }
     </script>
 </body>
 
 </html>
+

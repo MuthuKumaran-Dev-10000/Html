@@ -41,12 +41,7 @@
             background-color: #4CAF50;
             color: #fff;
         }
-
-        .opponent-message {
-            align-self: flex-start;
-            background-color: #ddd;
-        }
-
+        
         #message-input {
             width: 100%;
             padding: 8px;
@@ -85,7 +80,7 @@
             const message = messageInput.value.trim();
 
             if (message !== '') {
-                socket.emit('chat message', { message });
+                socket.emit('chat message', { message, username });
 
                 // Clear the input field
                 messageInput.value = '';
@@ -93,16 +88,20 @@
         }
 
         socket.on('chat message', (data) => {
-            const chatMessages = document.getElementById('chat-messages');
-            const newMessage = document.createElement('div');
-            newMessage.textContent = `${data.username}: ${data.message}`;
-            
-            // Apply different styles based on the sender
-            if (data.username === 'ME') {
-                newMessage.className = 'message my-message';
-            } 
+            if (data.username !== 'Opponent') {
+                const chatMessages = document.getElementById('chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.textContent = `${data.username}: ${data.message}`;
+                
+                // Apply different styles based on the sender
+                if (data.username === username) {
+                    newMessage.className = 'message my-message';
+                } else {
+                    newMessage.className = 'message';
+                }
 
-            chatMessages.appendChild(newMessage);
+                chatMessages.appendChild(newMessage);
+            }
         });
     </script>
 </body>

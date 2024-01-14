@@ -1,11 +1,15 @@
 const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const server = http.createServer(app);
+const io = socketIo(server);
+const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -22,14 +26,38 @@ connection.connect();
 
 app.use(express.static(__dirname));
 
+// Serve login.css
 app.get('/login.css', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.css'));
 });
 
+// Serve login.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
+// Socket.io chat functionality
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    // Ask for the username
+    socket.emit('request username');
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+    socket.on('set username', (username) => {
+        socket.username = username;
+    });
+
+    socket.on('chat message', (data) => {
+        io.emit('chat message', { message: data.message, username: socket.username });
+        io.emit('chat message', { message: data.message, username: 'Opponent' }); // Hardcoded username for opponent
+    });
+});
+
+// User signup endpoint
 app.post('/signup', async (req, res) => {
     const { name, email, password, age } = req.body;
 
@@ -70,6 +98,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+// User login endpoint
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -100,6 +129,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+// Start the server
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
