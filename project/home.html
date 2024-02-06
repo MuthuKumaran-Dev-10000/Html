@@ -363,7 +363,7 @@
                 <box-icon name='home'></box-icon>
                 <span>Home</span>
             </a>
-            <a href="#" class="tab-item" onclick="changeTab('post')">
+            <a href="Post.html" class="tab-item" onclick="changeTab('post')">
                 <box-icon name='message-square-detail'></box-icon>
                 <span>Post</span>
             </a>
@@ -387,12 +387,20 @@
     </div>
 
     <script>
-        function togglePlay(videoId) {
-            var video = document.getElementById(videoId).querySelector('.video-player');
-            if (video.paused) {
-                video.play();
+        function toggleAutoplay() {
+            var autoplayStatus = document.getElementById('autoplayStatus');
+            var videoElements = document.querySelectorAll('.video-player');
+
+            if (autoplayStatus.innerHTML === 'ON') {
+                autoplayStatus.innerHTML = 'OFF';
+                videoElements.forEach(function(video) {
+                    video.removeAttribute('autoplay');
+                });
             } else {
-                video.pause();
+                autoplayStatus.innerHTML = 'ON';
+                videoElements.forEach(function(video) {
+                    video.setAttribute('autoplay', '');
+                });
             }
         }
 
@@ -429,4 +437,11 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
 

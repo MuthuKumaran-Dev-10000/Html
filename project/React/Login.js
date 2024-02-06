@@ -14,7 +14,16 @@ class Login extends React.Component {
     // Implement logic for handling login button click
     console.log('Login clicked');
     // You can add authentication logic here
-  };
+
+    // For demonstration purposes, storing dummy user information
+    const user = {
+        id: 123,
+        email: 'user@example.com',
+    };
+
+    // Store user information in localStorage
+    localStorage.setItem('user', JSON.stringify(user));
+};
 
   render() {
     return (

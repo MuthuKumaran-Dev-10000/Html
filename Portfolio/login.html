@@ -144,7 +144,7 @@
 
 
 <script>
-    // Function to create the typing effect
+    
     function typeText(element, text, speed) {
         let i = 0;
         const intervalId = setInterval(() => {
@@ -156,7 +156,7 @@
         }, speed);
     }
 
-    // Typing effect for the headings
+    
     const headings = document.querySelectorAll('.portfolio1 h1, .portfolio2 h1, .wrapper h1, .wrapper a');
     headings.forEach((heading) => {
         const text = heading.innerText;
@@ -164,7 +164,7 @@
         typeText(heading, text, 80);
     });
 
-    // Typing effect for the skills
+    
     const skills = document.querySelectorAll('.portfolio1 h3');
     skills.forEach((skill) => {
         const text = skill.innerText;
@@ -172,7 +172,7 @@
         typeText(skill, text, 80);
     });
 
-    // Typing effect for the projects
+    
     const projects = document.querySelectorAll('.portfolio2 h3');
     projects.forEach((project) => {
         const text = project.innerText;

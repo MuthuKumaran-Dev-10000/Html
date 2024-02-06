@@ -1,0 +1,23 @@
+body{
+    display:flex;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    min-height:100vh;
+    background: url('background.jpg') no-repeat;
+    
+}
+
+.wrapper{
+    width: 420px;
+    background: transparent ;
+    border: 2px solid rgba(255,255,255,.2);
+    box-shadow: 0 0 10px rgba(0,0,0,.2);
+    backdrop-filter: blur(20px);
+    color: aliceblue;
+    border-radius: 10px;
+    padding: 30px 40px;
+    
+    text-align: center;
+}

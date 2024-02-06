@@ -10,6 +10,10 @@
             padding: 0;
             box-sizing: border-box;
             background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         #chat-container {
@@ -41,7 +45,12 @@
             background-color: #4CAF50;
             color: #fff;
         }
-        
+
+        .opponent-message {
+            align-self: flex-start;
+            background-color: #ddd;
+        }
+
         #message-input {
             width: 100%;
             padding: 8px;
@@ -64,7 +73,7 @@
     <div id="chat-container">
         <div id="chat-messages"></div>
         <input type="text" id="message-input" placeholder="Type your message...">
-        <button id="send-button" onclick="sendMessage()">Send</button>
+        <button id="send-button">Send</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -75,33 +84,31 @@
         const username = prompt("Please enter your username:");
         socket.emit('set username', username);
 
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+
         function sendMessage() {
             const messageInput = document.getElementById('message-input');
             const message = messageInput.value.trim();
 
             if (message !== '') {
-                socket.emit('chat message', { message, username });
-
-                // Clear the input field
+                socket.emit('chat message', { message });
                 messageInput.value = '';
             }
         }
 
         socket.on('chat message', (data) => {
-            if (data.username !== 'Opponent') {
-                const chatMessages = document.getElementById('chat-messages');
-                const newMessage = document.createElement('div');
-                newMessage.textContent = `${data.username}: ${data.message}`;
-                
-                // Apply different styles based on the sender
-                if (data.username === username) {
-                    newMessage.className = 'message my-message';
-                } else {
-                    newMessage.className = 'message';
-                }
+            const chatMessages = document.getElementById('chat-messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = `${data.username}: ${data.message}`;
 
-                chatMessages.appendChild(newMessage);
+            // Apply different styles based on the sender
+            if (data.username === username) {
+                newMessage.className = 'message my-message';
+            } else {
+                newMessage.className = 'message opponent-message';
             }
+
+            chatMessages.appendChild(newMessage);
         });
     </script>
 </body>

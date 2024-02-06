@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video/Voice Call</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #videos {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        video {
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        #codeDisplay {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        label, input {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #features {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 24px;
+            z-index: 2;
+        }
+
+        #features button {
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video/Voice Call</h1>
+    <div id="videos">
+        <video id="localVideo" autoplay muted playsinline onclick="toggleFeatures(this)"></video>
+        <video id="remoteVideo" autoplay playsinline onclick="toggleFeatures(this)"></video>
+    </div>
+    <div id="features">
+        <button onclick="endCall()">End Call</button>
+        <!-- Add other features here -->
+    </div>
+    <div id="codeDisplay">Your Code: <span id="code"></span></div>
+    <label for="codeInput">Enter Friend's Code:</label>
+    <input type="text" id="codeInput" placeholder="Enter code...">
+    <button onclick="startCall()">Start Call</button>
+    <button onclick="joinCall()">Join Call</button>
+
+    <script>
+        let localStream;
+        let remoteStream;
+        let peerConnection;
+
+        function generateCode() {
+            // Generate a random 6-digit code
+            return Math.floor(100000 + Math.random() * 900000);
+        }
+
+        function displayCode() {
+            const codeElement = document.getElementById('code');
+            codeElement.textContent = generateCode();
+        }
+
+        async function startCall() {
+            try {
+                displayCode();
+
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('localVideo').srcObject = localStream;
+
+                // Creating peer connection
+                peerConnection = new RTCPeerConnection();
+
+                // Add local stream to peer connection
+                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+                // Set up event handlers for ICE candidates and the negotiation needed event
+                peerConnection.onicecandidate = handleICECandidateEvent;
+                peerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
+
+                // Create an offer
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                // Simulating the exchange of SDP with the remote peer
+                handleOffer(peerConnection.localDescription);
+
+            } catch (error) {
+                console.error('Error starting call:', error);
+            }
+        }
+
+        async function joinCall() {
+            try {
+                // Get the friend's code from the input
+                const friendCode = document.getElementById('codeInput').value;
+
+                if (!friendCode) {
+                    alert('Please enter your friend\'s code to join the call.');
+                    return;
+                }
+
+                // Simulating the exchange of SDP with the remote peer
+                const remoteOffer = {
+                    sdp: peerConnection.localDescription.sdp,
+                    type: peerConnection.localDescription.type,
+                };
+
+                // Simulating the exchange of SDP with the remote peer (in a real application, you'd use a signaling server)
+                handleOffer(remoteOffer);
+
+            } catch (error) {
+                console.error('Error joining call:', error);
+            }
+        }
+
+        function handleICECandidateEvent(event) {
+            if (event.candidate) {
+                // In a real application, send the ICE candidate to the remote peer via a signaling server
+                console.log('ICE Candidate:', event.candidate);
+            }
+        }
+
+        async function handleNegotiationNeededEvent() {
+            try {
+                // Create an offer and set it as the local description
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                // Simulating the exchange of SDP with the remote peer
+                handleOffer(peerConnection.localDescription);
+
+            } catch (error) {
+                console.error('Error handling negotiation needed event:', error);
+            }
+        }
+
+        function handleOffer(remoteOffer) {
+            // Simulating the exchange of SDP with the remote peer (in a real application, you'd use a signaling server)
+            // In this example, we'll simulate it after a short delay
+            setTimeout(() => {
+                // Apply the remote offer to the peer connection
+                peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOffer));
+
+                // Create an answer and set it as the local description
+                peerConnection.createAnswer().then(answer => peerConnection.setLocalDescription(answer));
+
+                // Simulating the exchange of SDP with the remote peer
+                handleAnswer(peerConnection.localDescription);
+
+            }, 1000);
+        }
+
+        function handleAnswer(localAnswer) {
+            // Simulating the exchange of SDP with the remote peer (in a real application, you'd use a signaling server)
+            // In this example, we'll simulate it after a short delay
+            setTimeout(() => {
+                // Apply the local answer to the peer connection
+                peerConnection.setRemoteDescription(new RTCSessionDescription(localAnswer));
+
+            }, 1000);
+        }
+
+        function endCall() {
+            // Close the peer connection and stop local media
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+
+            // Clear video elements
+            document.getElementById('localVideo').srcObject = null;
+            document.getElementById('remoteVideo').srcObject = null;
+
+            // Clear code display
+                        document.getElementById('code').textContent = '';
+            
+            // Hide features when call ends
+            document.getElementById('features').style.display = 'none';
+        }
+
+        function toggleFeatures(videoElement) {
+            // Show features when the video is clicked
+            const featuresElement = document.getElementById('features');
+            featuresElement.style.display = 'flex';
+
+            // Hide features after a delay
+            setTimeout(() => {
+                featuresElement.style.display = 'none';
+            }, 5000); // Adjust the delay (in milliseconds) as needed
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+body{
+    background-image: url("Ni8 sky.jpg");
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    display: grid;
+    background-color: black;
+}
+
+
+form{
+    border-radius: 7%;
+    height : 50%;
+    width: 300px;
+    align-items: center;
+    align-content: center;
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+    animation: fadeIn 2s forwards; 
+    
+    
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.Male:checked{
+    background-color: blue;
+}
+input[type="radio"]:checked +label {
+    background-color: red;
+    color: white;
+    text-align: center;
+    justify-content: center;
+}
+
+input[type="text"],input[type="tel"],input[type="password"],input[type="email"],input[type="url"],select,input[type="date"]{
+    padding: 10px 10px 10px 10px;
+    border-radius: 12px;
+    border-color: transparent ;
+    margin-bottom: 10px;
+    background-color:transparent+white;
+    height:40px;
+    width: 300px;
+}
+.ol-group{
+    padding: 10px 10px 10px 10px;
+    border-radius: 12px;
+    border-color: transparent ;
+    margin-bottom: 10px;
+    background-color:white;
+    height:25px;
+    width: 280px;
+}
+.input{
+    padding: 10px 10px 10px 10px;
+    border-radius: 12px;
+}
+.terms{
+    padding: 50px;
+    display: inline-block;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 12px;
+    
+}
+button{
+    padding: 10px 10px 10px 10px;
+    border-radius: 12px;
+    border-color: transparent ;
+    margin-bottom: 10px;
+    background-color:transparent+white;
+    height:40px/2;
+    width: 300px/2;
+}
+button:hover{
+    color: white;
+    background-image: url(background.jpg);
+}
+
+h1{
+    text-align: center;
+    background-color: transparent ;
+    align-items: center;
+    
+}
+
+img{
+    border-radius: 2cm;
+    height: 1cm;
+    width:1cm;
+    align-items: center;
+    text-align: center;
+}
+

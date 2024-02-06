@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Video Upload</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .upload-container {
+            text-align: center;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .file-label {
+            display: block;
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            color: white;
+            font-size: 30px;
+            line-height: 50px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #videoTitle,
+        #videoDesc,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #fileInfo {
+            margin-top: 10px;
+        }
+
+        #fileInfo p {
+            margin: 0;
+        }
+
+        #fileInfo img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <form action="/uploadVideo" method="post" enctype="multipart/form-data">
+    <div class="upload-container">
+    <label for="videoInput" class="file-label">+</label>
+    <input type="file" id="videoInput" accept="video/*">
+    <input type="text" id="videoTitle" placeholder="Video Title">
+    <textarea id="videoDesc" placeholder="Video Description"></textarea>
+    <button onclick="uploadVideo()">Upload Video</button>
+
+    <div id="videoInfo">
+        <p id="videoFileName">No video uploaded!</p>
+        <button onclick="previewVideo()">Preview</button>
+    </div>
+</div>
+</form>
+<script>
+    function uploadVideo() {
+        var videoInput = document.getElementById('videoInput');
+        var videoInfo = document.getElementById('videoInfo');
+        var videoFileName = document.getElementById('videoFileName');
+        var videoTitle = document.getElementById('videoTitle');
+        var videoDesc = document.getElementById('videoDesc');
+
+        alert('Uploading video');
+
+        var formData = new FormData();
+        formData.append('videoFile', videoInput.files[0]);
+        formData.append('title', videoTitle.value);
+        formData.append('description', videoDesc.value);
+        formData.append('genre', 'your_genre_here'); // Add the actual genre value
+
+        // Emit 'upload video' event to the server
+        socket.emit('upload video', formData);
+
+        // Reset input fields
+        videoTitle.value = '';
+        videoDesc.value = '';
+        videoInput.value = '';
+
+        // Clear video info display
+        videoInfo.style.display = 'none';
+    }
+
+    function previewVideo() {
+        alert('Preview functionality for videos to be implemented.');
+    }
+</script>
+</body>
+</html>

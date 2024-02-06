@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="Ex1.css">
+</head>
+<body>
+    <form method="post" name="registration" id="registrationForm">
+        <input type="text" id="username" placeholder="Username" minlength="5" maxlength="10" required></input>
+        <input type="password" id="password" placeholder="Password"></input>
+        <select id="option" placeholder="Select Option">
+            <option value="default" selected disabled>Select an option</option>
+            <option value="Student">Student</option>
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Homemaker">Homemaker</option>
+        </select>
+        <div class="ol-group" id="ol-group">
+            <ol>
+                <label>Gender :</label>
+                <input type="radio" name="choice" value="Male" id="Male">
+                <label for="Male">Male</label>
+                <input type="radio" name="choice" value="Female" id="Female">
+                <label for="Female">Female</label>
+            </ol>
+        </div>
+        <input type="date" id="birthdate" name="birthdate"></input>
+        <input type="tel" id="tel" name="tel" placeholder="PH.no"></input>
+        <input type="email" id="userEmail" placeholder="Email" required></input>
+        <input type="url" id="websiteUrl" placeholder="SocialMediaURL"></input>
+        <br>
+        <input type="checkbox" id="terms" class="terms" required>Accept all <a href="#">Terms and Conditions</a></input>
+        <br>
+        <button type="reset">Reset</button>
+        <button type="button" onclick="validateAndSubmit()">Signup</button>
+    </form>
+
+    <script>
+        function validateAndSubmit() {
+            var phoneRegex = /^\d{10}$/;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var option = document.getElementById('option').value;
+            var gender = document.querySelector('input[name="choice"]:checked');
+            var birthdate = document.getElementById('birthdate').value;
+            var tel = document.getElementById('tel').value;
+            var userEmail = document.getElementById('userEmail').value;
+            var websiteUrl = document.getElementById('websiteUrl').value;
+            var termsChecked = document.getElementById('terms').checked;
+
+            if (!phoneRegex.test(tel)) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+
+            if (!emailRegex.test(userEmail)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (!termsChecked) {
+                alert('Please accept the Terms and Conditions.');
+                return;
+            }
+
+            alert('Registration successful!');
+           
+            window.location.href = 'Ex1login.html';
+        }
+    </script>
+</body>
+</html>

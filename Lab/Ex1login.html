@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" type="image/png" href="background.jpg">
+    <link rel="stylesheet" href="Ex1.css">
+</head>
+<body>
+    <label>Login</label>
+    <form onsubmit="return loginUser()">
+        <input type="text" id="username" placeholder="Username"/>
+        <input type="password" id="password" placeholder="Password"/>
+        <a href="Ex1signup.html">Don't have an account</a><br>
+        <button type="submit" id="Submit">Submit</button>
+    </form>
+
+    <script>
+        function loginUser() {
+            var enteredUsername = document.getElementById('username').value;
+            var enteredPassword = document.getElementById('password').value;
+
+            if(enteredUsername===enteredPassword) {
+                alert("Login Successfully");
+            }
+            else{
+                alert("Please enter the username and password as same");
+            }
+    </script>
+</body>
+</html>

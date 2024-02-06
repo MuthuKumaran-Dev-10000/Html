@@ -10,6 +10,10 @@
             padding: 0;
             box-sizing: border-box;
             background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         #chat-container {
@@ -69,7 +73,7 @@
     <div id="chat-container">
         <div id="chat-messages"></div>
         <input type="text" id="message-input" placeholder="Type your message...">
-        <button id="send-button" onclick="sendMessage()">Send</button>
+        <button id="send-button">Send</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -80,14 +84,14 @@
         const username = prompt("Please enter your username:");
         socket.emit('set username', username);
 
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+
         function sendMessage() {
             const messageInput = document.getElementById('message-input');
             const message = messageInput.value.trim();
 
             if (message !== '') {
                 socket.emit('chat message', { message });
-
-                // Clear the input field
                 messageInput.value = '';
             }
         }
@@ -96,11 +100,13 @@
             const chatMessages = document.getElementById('chat-messages');
             const newMessage = document.createElement('div');
             newMessage.textContent = `${data.username}: ${data.message}`;
-            
+
             // Apply different styles based on the sender
-            if (data.username === 'ME') {
+            if (data.username === username) {
                 newMessage.className = 'message my-message';
-            } 
+            } else {
+                newMessage.className = 'message opponent-message';
+            }
 
             chatMessages.appendChild(newMessage);
         });

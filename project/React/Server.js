@@ -24,7 +24,6 @@ io.on('connection', (socket) => {
 
     socket.on('chat message', (data) => {
         io.emit('chat message', { message: data.message, username: socket.username });
-        io.emit('chat message', { message: data.message, username: 'Opponent' }); // Hardcoded username for opponent
     });
 });
 
