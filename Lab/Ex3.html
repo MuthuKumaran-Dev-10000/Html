@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Home Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        #navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1;
+        }
+
+        #info {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 40px;
+            z-index: 1;
+            display: none;
+        }
+
+        #content {
+            margin-top: 40px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .post {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .post:hover {
+            transform: scale(1.05);
+        }
+
+        .post img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .post h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .channel-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .channel-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .channel-info span {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .post-details {
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar">Navigation Bar</div>
+    <div id="info"></div>
+    <div id="content"></div>
+
+    <script>
+        var posts = [
+            { title: 'React Installation Command', content: 'Learn how to install React', imageUrl: 'https://rumenz.com/static/cimg/react/react-install-0.jpg', channelName: 'React Tutorial', channelIcon: 'random1.jpg', likes: 50, dislikes: 5 },
+            { title: 'Awesome React Video', content: 'Watch this amazing React video', videoUrl: 'https://youtu.be/av5fmpgEJSU?si=kpYkBRF8lJnEpcFQ', channelName: 'React Video Channel', channelIcon: 'random2.jpg', likes: 120, dislikes: 10 },
+            // Add more posts as needed
+        ];
+
+        var contentContainer = document.getElementById('content');
+        var infoContainer = document.getElementById('info');
+
+        window.addEventListener('DOMContentLoaded', function () {
+            displayPosts(posts);
+        });
+
+        window.addEventListener('scroll', function () {
+            if (isBottomReached()) {
+                loadMorePosts();
+                displayInfo('Loading more posts...');
+            }
+        });
+
+        contentContainer.addEventListener('mouseover', function (event) {
+            if (event.target.classList.contains('post')) {
+                displayInfo('Mouse over post: ' + event.target.querySelector('h2').textContent);
+            }
+        });
+
+        contentContainer.addEventListener('click', function (event) {
+            if (event.target.classList.contains('post')) {
+                displayInfo('Post clicked: ' + event.target.querySelector('h2').textContent);
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            displayInfo('Window resized');
+        });
+
+        window.addEventListener('offline', function () {
+            displayInfo('You are offline');
+        });
+
+        window.addEventListener('online', function () {
+            displayInfo('You are online');
+        });
+
+        function displayPosts(posts) {
+            posts.forEach(function (post) {
+                var postElement = createPostElement(post);
+                contentContainer.appendChild(postElement);
+            });
+        }
+
+        function createPostElement(post) {
+            var postElement = document.createElement('div');
+            postElement.classList.add('post');
+
+            var channelInfo = document.createElement('div');
+            channelInfo.classList.add('channel-info');
+
+            var channelIcon = document.createElement('img');
+            channelIcon.src = post.channelIcon;
+            channelIcon.alt = 'Channel Icon';
+
+            var channelName = document.createElement('span');
+            channelName.textContent = post.channelName;
+
+            channelInfo.appendChild(channelIcon);
+            channelInfo.appendChild(channelName);
+
+            var titleElement = document.createElement('h2');
+            titleElement.textContent = post.title;
+
+            var contentElement = document.createElement('p');
+            contentElement.textContent = post.content;
+
+            var mediaElement = createMediaElement(post);
+
+            var detailsElement = document.createElement('div');
+            detailsElement.classList.add('post-details');
+            detailsElement.textContent = `Likes: ${post.likes} | Dislikes: ${post.dislikes}`;
+
+            postElement.appendChild(channelInfo);
+            postElement.appendChild(titleElement);
+            postElement.appendChild(contentElement);
+            postElement.appendChild(mediaElement);
+            postElement.appendChild(detailsElement);
+
+            return postElement;
+        }
+
+        function createMediaElement(post) {
+            var mediaElement;
+
+            if (post.imageUrl) {
+                mediaElement = document.createElement('img');
+                mediaElement.src = post.imageUrl;
+                mediaElement.alt = 'Post Image';
+            } else if (post.videoUrl) {
+                mediaElement = document.createElement('iframe');
+                mediaElement.src = post.videoUrl;
+                mediaElement.width = '100%';
+                mediaElement.height = '315'; 
+                mediaElement.frameborder = '0';
+                mediaElement.allowfullscreen = true;
+                mediaElement.alt = 'Post Video';
+            }
+
+            return mediaElement;
+        }
+
+        function isBottomReached() {
+            return (window.innerHeight + window.scrollY) >= document.body.offsetHeight;
+        }
+
+        function loadMorePosts() {
+            
+            var newPosts = [
+                { title: 'New Post 1', content: 'This is a new post added dynamically.', imageUrl: 'newImage.jpg', channelName: 'Channel C', channelIcon: 'channelC.png', likes: 30, dislikes: 2 },
+                { title: 'New Post 2', content: 'More content for the new post.', videoUrl: 'newVideo.mp4', channelName: 'Channel D', channelIcon: 'channelD.png', likes: 80, dislikes: 8 },
+                
+            ];
+
+            
+            posts = posts.concat(newPosts);
+
+            
+            displayPosts(newPosts);
+        }
+
+        function displayInfo(message) {
+            infoContainer.textContent = message;
+            infoContainer.style.display = 'block';
+
+            setTimeout(function () {
+                infoContainer.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

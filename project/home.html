@@ -9,47 +9,58 @@
     <title>YOUTUBE</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
             background-color: #f9f9f9;
             transition: background-color 0.3s;
-        }
-
-        body.dark-mode {
-            background-color: #333;
-            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .container {
-            position: relative;
-            min-height: 100vh;
-            background-color: #f9f9f9;
-            overflow: hidden; /* Hide horizontal scroll due to box-shadow on top bar */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .top-bar, .bottom-tab {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
         }
 
         .top-bar {
-            position: fixed;
-            top: 0;
-            width: 100%;
+            opacity: 0.9;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1; /* Ensure top bar stays above content */
         }
 
         .profile {
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
 
         .profile box-icon {
             font-size: 24px;
             margin-right: 8px;
             color: #606060;
+        }
+
+        .profile span {
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .search-bar {
@@ -94,12 +105,55 @@
             background-color: #0056b3;
         }
 
+        .dark-mode-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        .side-popup {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 0;
+            background-color: #fff;
+            overflow-x: hidden;
+            transition: width 0.3s;
+            box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .side-popup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .side-popup a {
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .side-popup a:hover {
+            color: #007bff;
+        }
+
         .content {
-            padding: 60px 20px 20px; /* Adjusted padding to allow space for top bar */
-            overflow-y: auto; /* Enable vertical scroll for content */
+            padding: 60px 20px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
 
         .video-card {
+            width: calc(33.33% - 20px);
             position: relative;
             background-color: #fff;
             border: 1px solid #ddd;
@@ -107,19 +161,27 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            display: flex; /* Use flexbox for layout */
-            box-sizing: border-box; /* Include padding and borders in the total width and height */
+            display: flex;
+            box-sizing: border-box;
+            flex-direction: column;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: scale(1.02);
         }
 
         .video-player {
-            flex: 1; /* Take remaining space */
-            width: 100%; /* Ensure the video takes up 100% of the width */
-            height: 100%; /* Adjust the height of the video player */
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
         }
 
         .video-details {
-            flex: 1; /* Take remaining space */
-            padding: 0 20px;
+            flex: 1;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -127,14 +189,17 @@
 
         .video-details h2 {
             margin-top: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .video-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #777;
         }
 
         .video-controls {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
             display: flex;
             justify-content: space-between;
             padding: 5px;
@@ -143,11 +208,21 @@
             transition: opacity 0.3s;
         }
 
+        .video-card:hover .video-controls {
+            opacity: 1;
+        }
+
         .video-controls button {
             background: none;
             border: none;
             cursor: pointer;
             font-size: 16px;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .video-controls button:hover {
+            color: #007bff;
         }
 
         .bottom-tab {
@@ -162,6 +237,8 @@
             align-items: center;
             height: 50px;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            transition: background-color 0.3s;
         }
 
         .tab-item {
@@ -198,45 +275,6 @@
             transform: translateX(-50%);
         }
 
-        /* Side Popup Menu Styles */
-        .side-popup {
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 0;
-            background-color: #fff;
-            overflow-x: hidden;
-            transition: width 0.3s;
-            box-shadow: -5px 0 5px rgba(0, 0, 0, 0.1);
-            z-index: 2;
-        }
-
-        .side-popup-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .side-popup a {
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-            transition: color 0.3s;
-        }
-
-        .side-popup a:hover {
-            color: #007bff;
-        }
-
-        /* Dark Mode Toggle */
-        .dark-mode-toggle {
-            cursor: pointer;
-            margin-left: 10px;
-            font-size: 20px;
-        }
-
         .settings-popup {
             position: fixed;
             bottom: 60px;
@@ -247,23 +285,33 @@
             display: none;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+        .explore-button {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 2;
+            transition: background-color 0.3s;
+        }
+
+        .explore-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="top-bar">
-            <div class="profile">
-                <box-icon name='user-circle'></box-icon>
-                <div class="profile" onclick="toggleSidePopup()" style="margin-left: auto; height: min-content; width: min-content;">
-                    <style>
-                        .profile:hover {
-                            background-color: red;
-                        }
-                    </style>
-                    <box-icon name='three-dots'></box-icon>
-                </div>
-
+            <div class="profile" onclick="toggleSidePopup()">
+                <box-icon name='three-dots'></box-icon>
                 <span>Your Name</span>
             </div>
             <div class="search-bar">
@@ -358,6 +406,7 @@
             </div>
             <!-- Add more video placeholders as needed -->
         </div>
+        <button class="explore-button" onclick="exploreMore()">Explore More</button>
         <nav class="bottom-tab">
             <a href="#" class="tab-item active" onclick="changeTab('home')">
                 <box-icon name='home'></box-icon>
@@ -371,6 +420,11 @@
                 <box-icon name='chat'></box-icon>
                 <span>Chat</span>
             </a>
+            <a href="link.html" class="tab-item" onclick="changeTab('link')">
+                <box-icon name='chat'></box-icon>
+                <span>link</span>
+            </a>
+
             <a href="#" class="tab-item" onclick="changeTab('subscription')">
                 <box-icon name='credit-card'></box-icon>
                 <span>Subscription</span>
@@ -433,15 +487,12 @@
                 settingsPopup.style.display = (settingsPopup.style.display === 'block') ? 'none' : 'block';
             }
         }
+
+        function exploreMore() {
+            // Implement logic for explore button
+            console.log("Exploring more...");
+        }
     </script>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
